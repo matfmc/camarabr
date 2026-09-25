@@ -1,55 +1,20 @@
 # CamaraBR — plugin da Câmara dos Deputados para Claude Code
 
 Plugin do [Claude Code](https://code.claude.com) para consultar, extrair e gerar relatórios com os
-[Dados Abertos da Câmara dos Deputados](https://dadosabertos.camara.leg.br/swagger/api.html).
+[Dados Abertos da Câmara dos Deputados](https://dadosabertos.camara.leg.br/swagger/api.html):
+deputados, despesas da cota parlamentar, proposições, tramitações e votações.
 
-Pergunte em linguagem natural:
+**Para usar o plugin, veja o [README do plugin](plugins/camarabr/README.md)**: requisitos, instalação,
+exemplos de perguntas e o que vem incluído.
 
-- "Faça um relatório do deputado Fulano em 2025"
-- "Como está a tramitação do PL 2338/2023?"
-- "Como cada partido votou na votação 2611313-31? Quem votou contra a orientação?"
-- "Ranking de gastos da cota parlamentar por partido em 2025"
-- "Exporte para CSV todas as PECs apresentadas em 2024"
+## Instalação rápida
 
-## O que vem no plugin
-
-| Componente | O que faz |
-|---|---|
-| **Servidor MCP `camara`** | 11 ferramentas que chamam a API: `buscar_deputados`, `perfil_deputado`, `despesas_deputado`, `buscar_proposicoes`, `dossie_proposicao`, `buscar_votacoes`, `resultado_votacao`, `listar_referencias`, `legislatura_do_periodo`, `consultar_api` (qualquer endpoint) e `exportar_dados` (CSV/JSON). Paginação, novas tentativas e armadilhas da API já tratadas. |
-| **Skill `/camarabr:relatorio-deputado`** | Relatório completo de um(a) deputado(a) |
-| **Skill `/camarabr:relatorio-proposicao`** | Dossiê de um projeto: situação, tramitação, votações |
-| **Skill `/camarabr:relatorio-votacao`** | Placar, votos por partido, fidelidade à orientação |
-| **Skill `/camarabr:analise-despesas`** | Análise da cota parlamentar (CEAP), inclusive rankings da Casa inteira via arquivo anual |
-| **Skill `/camarabr:extrair-dados`** | Extração para CSV/JSON/XLSX (API ou arquivos em massa) |
-| **Skill `dados-camara`** | Referência carregada automaticamente: conceitos e armadilhas da API |
-| **Subagente `pesquisador-legislativo`** | Investigações que exigem muitas consultas cruzadas |
-
-As skills também são acionadas automaticamente quando o pedido combina com elas; não é preciso digitar o `/`.
-
-## Requisitos
-
-- Claude Code
-- Node.js 18 ou superior (`node --version`)
-
-Nenhuma chave de API é necessária: os dados são públicos.
-
-## Instalação
-
-### A partir deste repositório no GitHub
+Requer Node.js 18 ou superior.
 
 ```
-/plugin marketplace add matfmc/camarabr
-/plugin install camarabr@camara-dados-abertos
+claude plugin marketplace add matfmc/camarabr
+claude plugin install camarabr@camara-dados-abertos
 ```
-
-### A partir de uma pasta local
-
-```
-/plugin marketplace add C:\caminho\para\claude-plugin-camara
-/plugin install camarabr@camara-dados-abertos
-```
-
-Para testar sem instalar: `claude --plugin-dir ./plugins/camarabr`.
 
 ## Estrutura
 
@@ -58,6 +23,8 @@ Para testar sem instalar: `claude --plugin-dir ./plugins/camarabr`.
 plugins/camarabr/
   .claude-plugin/plugin.json        manifesto do plugin
   .mcp.json                         registra o servidor MCP
+  README.md                         documentação para quem usa
+  CHANGELOG.md                      histórico de versões
   server/                           código do servidor MCP (TypeScript)
     src/                            api.ts, ferramentas.ts, formato.ts, index.ts
     dist/index.js                   bundle versionado (quem instala não roda npm install)
@@ -77,21 +44,21 @@ npm run build      # gera dist/index.js — faça commit dele
 npm test           # chama cada ferramenta na API real
 ```
 
-Depois de alterar skills ou o agente, use `/reload-plugins` no Claude Code. Antes de publicar, rode:
+Para testar sem instalar: `claude --plugin-dir ./plugins/camarabr`. Depois de alterar skills ou o agente,
+use `/reload-plugins` no Claude Code.
 
-```
-claude plugin validate ./plugins/camarabr --strict
-claude plugin validate . --strict
-```
+## Lançar uma versão
 
-Ao lançar uma versão nova, aumente `version` em `plugins/camarabr/.claude-plugin/plugin.json`.
-
-## Armadilhas da API já tratadas
-
-- `/deputados/{id}/despesas` devolve vazio (sem erro) sem `idLegislatura`. O servidor preenche o parâmetro.
-- `/proposicoes`, `/votacoes` e `/eventos` sem datas cobrem só os últimos 30 dias.
-- No arquivo anual da cota do ano corrente podem faltar passagens aéreas (SIGEPA) que a API já traz.
+1. Aumente `version` em `plugins/camarabr/.claude-plugin/plugin.json` (sem isso, quem já instalou não
+   recebe a atualização) e registre a mudança em `plugins/camarabr/CHANGELOG.md`.
+2. Se mexeu no servidor, rode `npm run build` e `npm test`.
+3. Valide:
+   ```
+   claude plugin validate ./plugins/camarabr --strict
+   claude plugin validate . --strict
+   ```
+4. Faça commit e push para `main`. Quem usa recebe com `claude plugin update camarabr@camara-dados-abertos`.
 
 ## Licença
 
-MIT. Os dados são da Câmara dos Deputados e têm licença própria de dados abertos.
+MIT. Os dados são da Câmara dos Deputados e seguem a política de dados abertos da Câmara.

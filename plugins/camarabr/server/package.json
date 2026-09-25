@@ -1,6 +1,6 @@
 {
   "name": "camarabr-mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "MCP server para a API de Dados Abertos da Câmara dos Deputados",
   "type": "module",

@@ -1,5 +1,5 @@
 node_modules/
-# O bundle em plugins/camara/server/dist/ É versionado de propósito:
+# O bundle em plugins/camarabr/server/dist/ É versionado de propósito:
 # quem instala o plugin não roda npm install.
 *.log
 .DS_Store

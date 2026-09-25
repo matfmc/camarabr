@@ -45,7 +45,7 @@ Pedido: **$ARGUMENTS**
 
 - **Some sempre `vlrLiquido`**, que é o valor efetivamente reembolsado. `vlrDocumento` inclui glosas.
 - **As lideranças partidárias** ("LIDERANÇA DO PT", "LID.GOV-CD") aparecem como se fossem parlamentares, com `ideCadastro` vazio. Exclua-as de rankings de deputados, ou mostre-as à parte.
-- **No ano corrente, o arquivo em massa pode vir incompleto.** Em setembro de 2026, o `Ano-2026.csv` não tinha nenhuma linha "PASSAGEM AÉREA - SIGEPA", que a API já trazia; o de 2025 tinha 37 mil. Por outro lado, "CELULAR FUNCIONAL" (telefonia) aparece no arquivo e não na API. Para o ano corrente, confira o total de ao menos um deputado com `despesas_deputado` e avise o usuário sobre a diferença.
+- **O arquivo em massa não bate exatamente com a API, mesmo em anos fechados.** Em setembro de 2026, o `Ano-2026.csv` não tinha nenhuma linha "PASSAGEM AÉREA - SIGEPA", que a API já trazia. No `Ano-2025.csv` elas existem (37 mil), mas faltam algumas: para o deputado 204534, o arquivo tinha 54 passagens (R$ 19,5 mil) e a API, 84 (R$ 46,1 mil). No sentido oposto, "CELULAR FUNCIONAL" (telefonia) aparece no arquivo e não na API. Em qualquer ano, confira o total de ao menos um deputado com `despesas_deputado` e avise o usuário sobre a diferença. Para valores de um deputado específico, prefira a API.
 - **O teto da cota varia por UF** (é maior para estados mais distantes de Brasília). Comparar valores absolutos entre UFs sem dizer isso é enganoso.
 - **Deputados que exerceram parte do ano** (suplentes, licenciados) gastam menos. Diga isso ao montar rankings.
 

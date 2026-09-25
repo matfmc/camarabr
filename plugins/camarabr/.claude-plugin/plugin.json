@@ -1,11 +1,14 @@
 {
   "name": "camarabr",
   "displayName": "CamaraBR",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Consulta, extrai e gera relatórios com os Dados Abertos da Câmara dos Deputados: deputados, despesas da cota parlamentar, proposições, tramitações e votações.",
   "author": {
-    "name": "matfmc"
+    "name": "matfmc",
+    "url": "https://github.com/matfmc"
   },
+  "homepage": "https://github.com/matfmc/camarabr/tree/main/plugins/camarabr#readme",
+  "repository": "https://github.com/matfmc/camarabr",
   "license": "MIT",
   "keywords": [
     "camarabr",

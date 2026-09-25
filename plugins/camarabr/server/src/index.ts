@@ -4,7 +4,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { registrarFerramentas } from "./ferramentas.js";
 
 const server = new McpServer(
-  { name: "camara", version: "0.1.0" },
+  { name: "camara", version: "0.1.1" },
   {
     instructions:
       "Ferramentas para a API de Dados Abertos da Câmara dos Deputados (Brasil). " +
