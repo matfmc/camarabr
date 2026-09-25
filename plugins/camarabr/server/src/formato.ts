@@ -4,13 +4,19 @@ import { dirname, isAbsolute, resolve } from "node:path";
 // Respostas maiores que isso são cortadas; o Claude é orientado a usar exportar_dados.
 const LIMITE_CARACTERES = 60_000;
 
+// No modo HTTP não existe exportar_dados, então o aviso de corte sugere outra saída.
+let dicaCorte = "ou use a ferramenta exportar_dados para salvar tudo em arquivo";
+export function definirDicaCorte(texto: string) {
+  dicaCorte = texto;
+}
+
 export function respostaJson(valor: unknown) {
   let texto = JSON.stringify(valor);
   if (texto.length > LIMITE_CARACTERES) {
     texto =
       texto.slice(0, LIMITE_CARACTERES) +
       `\n\n[RESPOSTA CORTADA: ${texto.length} caracteres. Filtre mais a consulta, reduza max_itens ` +
-      `ou use a ferramenta exportar_dados para salvar tudo em arquivo.]`;
+      `${dicaCorte}.]`;
   }
   return { content: [{ type: "text" as const, text: texto }] };
 }

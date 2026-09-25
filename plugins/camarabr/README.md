@@ -50,6 +50,75 @@ claude plugin update camarabr@camara-dados-abertos
 Para receber atualizações automaticamente, ative o auto-update do marketplace `camara-dados-abertos`
 na aba **Marketplaces** do comando `/plugin`.
 
+## Usar pela web
+
+### Claude Code na web (claude.ai/code)
+
+As sessões rodam num contêiner na nuvem com Node, então o plugin funciona completo. Coloque no
+`.claude/settings.json` do repositório que você abre na sessão:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "camara-dados-abertos": {
+      "source": { "source": "github", "repo": "matfmc/camarabr" }
+    }
+  },
+  "enabledPlugins": {
+    "camarabr@camara-dados-abertos": true
+  }
+}
+```
+
+Se o ambiente da sessão estiver com acesso à rede limitado, libere `dadosabertos.camara.leg.br`
+(e `www.camara.leg.br`, para os arquivos anuais da cota).
+
+### Chat do claude.ai (conector personalizado)
+
+O chat não instala plugins, mas aceita servidores MCP remotos como **conectores**. O servidor do
+CamaraBR tem um modo HTTP para isso. Alguém hospeda uma vez e qualquer pessoa adiciona a URL.
+
+**1. Hospedar o servidor.** Qualquer serviço que rode Docker ou Node 18+ com HTTPS serve (Render,
+Railway, Fly.io, uma VPS…). O bundle `server/dist/index.js` não tem dependências externas.
+
+- Com Docker, use o `Dockerfile` da pasta `plugins/camarabr/server`:
+  ```
+  docker build -t camarabr-mcp plugins/camarabr/server
+  docker run -p 3000:3000 camarabr-mcp
+  ```
+- Sem Docker, o comando de início é `node dist/index.js --http`, a partir de `plugins/camarabr/server`.
+
+Exemplo no Render: **New → Web Service**, conecte o repositório, escolha **Docker** como ambiente e
+`plugins/camarabr/server` como **Root Directory**. O Render define a porta sozinho. No plano gratuito o
+serviço hiberna sem uso, e a primeira chamada depois disso pode demorar ou falhar por tempo esgotado.
+
+Variáveis aceitas:
+
+| Variável | Padrão | Uso |
+|---|---|---|
+| `PORT` | `3000` | Porta HTTP |
+| `HOST` | `0.0.0.0` | Interface de rede |
+| `MCP_TRANSPORT` | — | `http` liga o modo HTTP (equivale a `--http`) |
+
+Rotas: `POST /mcp` é o endpoint MCP (Streamable HTTP, sem sessão); `GET /` responde 200 para
+verificações de saúde. Para conferir, abra `https://seu-servidor/` no navegador.
+
+**2. Adicionar no claude.ai.** Em **Configurações → Conectores → Adicionar conector personalizado**,
+dê um nome (ex.: CamaraBR) e cole a URL terminando em `/mcp`, por exemplo
+`https://seu-servico.onrender.com/mcp`. Não há autenticação: os dados são públicos. Em planos Team e
+Enterprise, quem administra a organização adiciona o conector para todos.
+
+Diferenças em relação ao plugin local:
+
+- São 10 ferramentas: `exportar_dados` fica de fora, porque gravaria o arquivo no disco do servidor.
+  Para planilhas, peça ao Claude que monte o arquivo com os dados que as ferramentas devolvem.
+- As skills e o subagente não vêm junto. Se quiser, envie as pastas de `skills/` como .zip em
+  **Configurações → Capacidades → Skills**. `relatorio-*` e `dados-camara` funcionam só com o conector;
+  `analise-despesas` (ranking da Casa inteira) e `extrair-dados` dependem de rodar scripts e baixar
+  arquivos, o que pode não funcionar no chat.
+- Quem hospeda vê as consultas que passam pelo servidor (quais deputados, projetos etc.), como em
+  qualquer serviço web.
+
 ## O que vem no plugin
 
 | Componente | O que faz |

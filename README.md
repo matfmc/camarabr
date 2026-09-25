@@ -26,9 +26,12 @@ plugins/camarabr/
   README.md                         documentação para quem usa
   CHANGELOG.md                      histórico de versões
   server/                           código do servidor MCP (TypeScript)
-    src/                            api.ts, ferramentas.ts, formato.ts, index.ts
+    src/                            api.ts, ferramentas.ts, formato.ts, servidor.ts,
+                                    http.ts (modo HTTP), index.ts (escolhe stdio ou HTTP)
     dist/index.js                   bundle versionado (quem instala não roda npm install)
-    test/smoke.mjs                  teste contra a API real
+    test/smoke.mjs                  teste contra a API real (stdio)
+    test/smoke-http.mjs             teste do modo HTTP
+    Dockerfile                      imagem para hospedar o modo HTTP
   skills/<nome>/SKILL.md            skills
   skills/analise-despesas/scripts/  ceap.mjs (agrega o arquivo anual da cota)
   agents/pesquisador-legislativo.md subagente
@@ -41,8 +44,12 @@ cd plugins/camarabr/server
 npm install
 npm run typecheck
 npm run build      # gera dist/index.js — faça commit dele
-npm test           # chama cada ferramenta na API real
+npm test           # chama as ferramentas na API real, em stdio e em HTTP
+npm run start:http # servidor HTTP local em http://localhost:3000/mcp
 ```
+
+Para usar o servidor como conector no claude.ai, veja "Usar pela web" no
+[README do plugin](plugins/camarabr/README.md#usar-pela-web).
 
 Para testar sem instalar: `claude --plugin-dir ./plugins/camarabr`. Depois de alterar skills ou o agente,
 use `/reload-plugins` no Claude Code.

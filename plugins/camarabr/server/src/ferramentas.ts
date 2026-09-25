@@ -85,55 +85,6 @@ export function registrarFerramentas(server: McpServer) {
     },
   );
 
-  // ---------------------------------------------------------------- exportação
-  server.registerTool(
-    "exportar_dados",
-    {
-      title: "Exportar dados para arquivo",
-      description:
-        "Baixa uma lista de qualquer endpoint (com paginação automática) e salva em CSV ou JSON no disco. " +
-        "Use para extrações grandes ou quando o usuário quer um arquivo (planilha, base para análise). " +
-        "CSV sai com separador ';' e BOM UTF-8 por padrão, para abrir direto no Excel em português. " +
-        "Objetos aninhados viram colunas com ponto (ex.: ultimoStatus.siglaPartido). " +
-        "Caminhos relativos são salvos na pasta do projeto aberto.",
-      inputSchema: {
-        caminho: z.string().describe("Endpoint de lista, ex.: 'proposicoes', 'deputados/204379/despesas'"),
-        parametros: parametrosLivres,
-        arquivo: z.string().describe("Arquivo de saída, ex.: 'dados/proposicoes-2025.csv'"),
-        formato: z.enum(["csv", "json"]).default("csv"),
-        separador: z.string().max(1).default(";"),
-        max_itens: z.number().int().min(1).max(MAX_ITENS_ABSOLUTO).default(10_000),
-      },
-      annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: true },
-    },
-    async ({ caminho, parametros = {}, arquivo, formato, separador, max_itens }) => {
-      try {
-        const r = await consultarPaginado(caminho, parametros, max_itens);
-        const destino = resolverCaminho(arquivo);
-        let colunas: string[] = [];
-        if (formato === "csv") {
-          const out = paraCsv(r.dados, separador);
-          colunas = out.colunas;
-          await salvarArquivo(destino, out.csv, true);
-        } else {
-          await salvarArquivo(destino, JSON.stringify(r.dados, null, 2), false);
-          colunas = r.dados[0] ? Object.keys(r.dados[0]) : [];
-        }
-        return respostaJson({
-          arquivo: destino,
-          registros: r.dados.length,
-          total_na_api: r.total,
-          truncado: r.truncado,
-          aviso: r.truncado ? "Há mais registros na API. Aumente max_itens ou use os arquivos em massa (skill extrair-dados)." : undefined,
-          colunas,
-          amostra: r.dados.slice(0, 3),
-        });
-      } catch (e) {
-        return respostaErro(e);
-      }
-    },
-  );
-
   // ---------------------------------------------------------------- deputados
   server.registerTool(
     "buscar_deputados",
@@ -516,5 +467,56 @@ export function registrarFerramentas(server: McpServer) {
     },
     async ({ ano }) =>
       respostaJson(ano ? { ano, legislaturas: legislaturasDoAno(ano) } : { atual: legislaturaAtual() }),
+  );
+}
+
+/** Grava arquivos no disco de quem roda o servidor: só faz sentido no plugin local (stdio). */
+export function registrarExportacao(server: McpServer) {
+  server.registerTool(
+    "exportar_dados",
+    {
+      title: "Exportar dados para arquivo",
+      description:
+        "Baixa uma lista de qualquer endpoint (com paginação automática) e salva em CSV ou JSON no disco. " +
+        "Use para extrações grandes ou quando o usuário quer um arquivo (planilha, base para análise). " +
+        "CSV sai com separador ';' e BOM UTF-8 por padrão, para abrir direto no Excel em português. " +
+        "Objetos aninhados viram colunas com ponto (ex.: ultimoStatus.siglaPartido). " +
+        "Caminhos relativos são salvos na pasta do projeto aberto.",
+      inputSchema: {
+        caminho: z.string().describe("Endpoint de lista, ex.: 'proposicoes', 'deputados/204379/despesas'"),
+        parametros: parametrosLivres,
+        arquivo: z.string().describe("Arquivo de saída, ex.: 'dados/proposicoes-2025.csv'"),
+        formato: z.enum(["csv", "json"]).default("csv"),
+        separador: z.string().max(1).default(";"),
+        max_itens: z.number().int().min(1).max(MAX_ITENS_ABSOLUTO).default(10_000),
+      },
+      annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: true },
+    },
+    async ({ caminho, parametros = {}, arquivo, formato, separador, max_itens }) => {
+      try {
+        const r = await consultarPaginado(caminho, parametros, max_itens);
+        const destino = resolverCaminho(arquivo);
+        let colunas: string[] = [];
+        if (formato === "csv") {
+          const out = paraCsv(r.dados, separador);
+          colunas = out.colunas;
+          await salvarArquivo(destino, out.csv, true);
+        } else {
+          await salvarArquivo(destino, JSON.stringify(r.dados, null, 2), false);
+          colunas = r.dados[0] ? Object.keys(r.dados[0]) : [];
+        }
+        return respostaJson({
+          arquivo: destino,
+          registros: r.dados.length,
+          total_na_api: r.total,
+          truncado: r.truncado,
+          aviso: r.truncado ? "Há mais registros na API. Aumente max_itens ou use os arquivos em massa (skill extrair-dados)." : undefined,
+          colunas,
+          amostra: r.dados.slice(0, 3),
+        });
+      } catch (e) {
+        return respostaErro(e);
+      }
+    },
   );
 }
