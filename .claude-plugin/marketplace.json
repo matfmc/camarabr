@@ -1,0 +1,14 @@
+{
+  "name": "camara-dados-abertos",
+  "owner": {
+    "name": "matfmc"
+  },
+  "description": "Plugins do Claude Code para trabalhar com os Dados Abertos da Câmara dos Deputados.",
+  "plugins": [
+    {
+      "name": "camarabr",
+      "source": "./plugins/camarabr",
+      "description": "CamaraBR — Consulta, extrai e gera relatórios com os Dados Abertos da Câmara dos Deputados."
+    }
+  ]
+}
