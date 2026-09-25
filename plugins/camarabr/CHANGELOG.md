@@ -1,12 +1,14 @@
 # Changelog
 
+## 0.2.1 — 2026-09-25
+
+- Removido o modo HTTP do servidor MCP, que entrou na 0.2.0: o servidor volta a rodar só em stdio,
+  como plugin. O uso pela web fica pelo Claude Code na web (claude.ai/code).
+- README com a seção "Usar pela web", só para o Claude Code na web.
+
 ## 0.2.0 — 2026-09-25
 
-- Servidor MCP ganha modo HTTP (Streamable HTTP, sem sessão) com `--http` ou `MCP_TRANSPORT=http`,
-  para hospedar e usar como conector personalizado no claude.ai. O plugin continua em stdio.
-- No modo HTTP, `exportar_dados` não é registrada: ela gravaria arquivos no disco do servidor.
-- `Dockerfile` em `server/` e guia "Usar pela web" no README (Claude Code na web e conector no claude.ai).
-- Teste de fumaça do modo HTTP (`npm run test:http`); `npm test` roda os dois modos.
+- Modo HTTP do servidor MCP para uso como conector no claude.ai (removido na 0.2.1).
 
 ## 0.1.1 — 2026-09-25
 

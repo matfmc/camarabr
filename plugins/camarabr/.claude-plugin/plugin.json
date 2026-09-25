@@ -1,7 +1,7 @@
 {
   "name": "camarabr",
   "displayName": "CamaraBR",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Consulta, extrai e gera relatórios com os Dados Abertos da Câmara dos Deputados: deputados, despesas da cota parlamentar, proposições, tramitações e votações.",
   "author": {
     "name": "matfmc",

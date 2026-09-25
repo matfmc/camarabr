@@ -1,6 +1,6 @@
 {
   "name": "camarabr-mcp-server",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "MCP server para a API de Dados Abertos da Câmara dos Deputados",
   "type": "module",
@@ -8,9 +8,7 @@
     "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --format=esm --minify --legal-comments=none --outfile=dist/index.js --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\"",
     "typecheck": "tsc --noEmit",
     "start": "node dist/index.js",
-    "start:http": "node dist/index.js --http",
-    "test": "node test/smoke.mjs && node test/smoke-http.mjs",
-    "test:http": "node test/smoke-http.mjs"
+    "test": "node test/smoke.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.1",
