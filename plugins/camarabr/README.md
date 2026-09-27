@@ -76,7 +76,7 @@ codex plugin add camarabr@camara-dados-abertos
 
 Abra uma conversa nova após a atualização. O catálogo `.claude-plugin/marketplace.json` é
 compartilhado; o Codex lê seu próprio manifesto em `.codex-plugin/plugin.json`.
-Para testar uma versão ainda não publicada, siga o [desenvolvimento local](../../README.md#desenvolvimento).
+Para testar uma versão ainda não publicada, siga o [desenvolvimento local](../../DESENVOLVIMENTO.md#desenvolvimento).
 
 ## Usar pela web (Claude Code na web)
 
