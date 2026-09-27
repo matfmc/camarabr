@@ -1,6 +1,6 @@
 # CamaraBR
 
-Plugin do [Claude Code](https://code.claude.com) para consultar, extrair e gerar relatórios com os
+Plugin para [Claude Code](https://code.claude.com) e [Codex](https://developers.openai.com/plugins/build/plugins), para consultar, extrair e gerar relatórios com os
 [Dados Abertos da Câmara dos Deputados](https://dadosabertos.camara.leg.br/swagger/api.html):
 deputados, despesas da cota parlamentar (CEAP), proposições, tramitações e votações.
 
@@ -12,9 +12,11 @@ Pergunte em linguagem natural, em português:
 - "Ranking de gastos da cota parlamentar por partido em 2025"
 - "Exporte para CSV todas as PECs apresentadas em 2024"
 
+Primeira vez? O [manual rápido](../../MANUAL.md) tem o passo a passo e um prompt que instala tudo.
+
 ## Requisitos
 
-- Claude Code
+- Claude Code, Cowork ou Codex com suporte a plugins e execução local de MCP
 - Node.js 18 ou superior. Confira com `node --version`. Se não tiver, instale a versão LTS em
   [nodejs.org](https://nodejs.org) ou pelo gerenciador de pacotes:
   - Windows: `winget install OpenJS.NodeJS.LTS`
@@ -24,6 +26,8 @@ Pergunte em linguagem natural, em português:
 Nenhuma chave de API ou cadastro é necessário: os dados são públicos.
 
 ## Instalação
+
+### Claude Code
 
 No terminal:
 
@@ -50,6 +54,30 @@ claude plugin update camarabr@camara-dados-abertos
 Para receber atualizações automaticamente, ative o auto-update do marketplace `camara-dados-abertos`
 na aba **Marketplaces** do comando `/plugin`.
 
+### Codex
+
+No terminal, com uma versão do Codex CLI que ofereça `codex plugin`:
+
+```
+codex plugin marketplace add matfmc/camarabr
+codex plugin add camarabr@camara-dados-abertos
+```
+
+No app Codex, também é possível instalar o CamaraBR pelo catálogo de plugins depois de adicionar
+o marketplace. Comece uma conversa nova e peça uma consulta à Câmara. No CLI, `/mcp` permite
+conferir as ferramentas do servidor. Não é necessário configurar outro MCP manualmente.
+
+Para atualizar:
+
+```
+codex plugin marketplace upgrade camara-dados-abertos
+codex plugin add camarabr@camara-dados-abertos
+```
+
+Abra uma conversa nova após a atualização. O catálogo `.claude-plugin/marketplace.json` é
+compartilhado; o Codex lê seu próprio manifesto em `.codex-plugin/plugin.json`.
+Para testar uma versão ainda não publicada, siga o [desenvolvimento local](../../README.md#desenvolvimento).
+
 ## Usar pela web (Claude Code na web)
 
 No [Claude Code na web](https://claude.ai/code) as sessões rodam num contêiner na nuvem com Node, então o
@@ -71,7 +99,15 @@ plugin funciona completo. Coloque no `.claude/settings.json` do repositório que
 Se o ambiente da sessão estiver com acesso à rede limitado, libere `dadosabertos.camara.leg.br`
 (e `www.camara.leg.br`, para os arquivos anuais da cota).
 
-O chat comum do claude.ai não instala plugins, então o CamaraBR não funciona lá.
+## Usar no Cowork
+
+O plugin também funciona no Cowork (aba **Cowork** do app Claude, planos pagos), com o Node.js instalado no
+computador. Em **Customize** → **Plugins**, adicione o marketplace a partir do repositório `matfmc/camarabr` e
+instale o CamaraBR.
+
+No chat (claude.ai ou aba Chat do app), o CamaraBR não funciona: o servidor MCP local de um plugin só roda
+no Claude Code, no Cowork e no Codex com execução local. Esta instalação não cria um conector remoto
+para o chat do Claude nem para o chat comum do ChatGPT.
 
 ## O que vem no plugin
 
@@ -84,9 +120,12 @@ O chat comum do claude.ai não instala plugins, então o CamaraBR não funciona 
 | **Skill `/camarabr:analise-despesas`** | Análise da cota parlamentar (CEAP), inclusive rankings da Casa inteira via arquivo anual |
 | **Skill `/camarabr:extrair-dados`** | Extração para CSV/JSON/XLSX (API ou arquivos em massa) |
 | **Skill `dados-camara`** | Referência carregada automaticamente: conceitos e armadilhas da API |
-| **Subagente `pesquisador-legislativo`** | Investigações que exigem muitas consultas cruzadas |
+| **Subagente `pesquisador-legislativo` (Claude)** | Investigações que exigem muitas consultas cruzadas |
 
 As skills também são acionadas automaticamente quando o pedido combina com elas; não é preciso digitar o `/`.
+Os atalhos `/camarabr:...` acima são do Claude Code. No Codex, peça em linguagem natural ou selecione
+a skill disponível no cliente. As seis skills e as 11 ferramentas MCP são compartilhadas; o arquivo
+de subagente do Claude não registra um subagente no Codex.
 
 ## Cuidados com os dados
 

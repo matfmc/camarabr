@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 — 2026-09-27
+
+- Adicionado manifesto `.codex-plugin/plugin.json`, com apresentação no Codex e referências
+  às mesmas skills e ao mesmo servidor MCP usados pelo Claude.
+- Catálogo `.claude-plugin/marketplace.json` reaproveitado pelos dois clientes.
+- Skills passam a considerar o pedido da conversa quando `$ARGUMENTS` não é substituído;
+  análise de despesas resolve o script pelo caminho da skill também no Codex.
+- Documentação de instalação, atualização e teste local para Claude Code e Codex.
+- Teste local de empacotamento e inicialização MCP, sem consultas à API da Câmara.
+
 ## 0.2.1 — 2026-09-25
 
 - Removido o modo HTTP do servidor MCP, que entrou na 0.2.0: o servidor volta a rodar só em stdio,

@@ -6,7 +6,7 @@ argument-hint: "<o que extrair> [período] [formato]"
 
 # Extração de dados da Câmara
 
-Pedido: **$ARGUMENTS**
+Pedido: use a solicitação do usuário na conversa. No Claude, os argumentos do atalho são **$ARGUMENTS**; se esse marcador não for substituído, use o pedido da conversa.
 
 Salve em `dados/` no projeto, a menos que o usuário indique outro lugar. Diga sempre o caminho, o número de registros e as colunas principais.
 

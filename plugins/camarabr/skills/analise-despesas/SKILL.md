@@ -7,7 +7,7 @@ allowed-tools: Bash(node ${CLAUDE_SKILL_DIR}/scripts/ceap.mjs *)
 
 # Análise da cota parlamentar (CEAP)
 
-Pedido: **$ARGUMENTS**
+Pedido: use a solicitação do usuário na conversa. No Claude, os argumentos do atalho são **$ARGUMENTS**; se esse marcador não for substituído, use o pedido da conversa.
 
 ## Escolha a fonte
 
@@ -30,9 +30,12 @@ Pedido: **$ARGUMENTS**
    tar -xf dados/Ano-2025.csv.zip -C dados        # Windows/macOS; no Linux use: unzip -o dados/Ano-2025.csv.zip -d dados
    ```
    Reaproveite o arquivo se ele já estiver em `dados/`.
-2. Agregue com o script que vem na skill:
+2. Agregue com `scripts/ceap.mjs`, relativo à pasta deste `SKILL.md`. Resolva o caminho
+   absoluto a partir da localização da skill carregada e mantenha-o entre aspas (inclusive no Windows).
+   No Claude, `${CLAUDE_SKILL_DIR}` pode ser usado para localizar essa pasta; no Codex, use o caminho
+   informado ao carregar a skill, sem depender dessa variável. Substitua o caminho ilustrativo abaixo:
    ```
-   node ${CLAUDE_SKILL_DIR}/scripts/ceap.mjs dados/Ano-2025.csv --agrupar deputado,partido,uf,tipo --top 20
+   node "<pasta-absoluta-da-skill>/scripts/ceap.mjs" dados/Ano-2025.csv --agrupar deputado,partido,uf,tipo --top 20
    ```
    Opções:
    - `--agrupar` recebe uma ou mais de: deputado, partido, uf, tipo, fornecedor, mes.

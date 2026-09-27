@@ -1,0 +1,30 @@
+{
+  "name": "camarabr",
+  "version": "0.3.0",
+  "description": "Consulta, extrai e gera relatórios com os Dados Abertos da Câmara dos Deputados: deputados, despesas da cota parlamentar, proposições, tramitações e votações.",
+  "author": {
+    "name": "matfmc",
+    "url": "https://github.com/matfmc"
+  },
+  "homepage": "https://github.com/matfmc/camarabr/tree/main/plugins/camarabr#readme",
+  "repository": "https://github.com/matfmc/camarabr",
+  "license": "MIT",
+  "keywords": ["camarabr", "camara", "deputados", "dados-abertos", "legislativo", "brasil", "transparencia", "ceap"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "CamaraBR",
+    "shortDescription": "Consulte os dados públicos da Câmara dos Deputados.",
+    "longDescription": "Pesquise deputados, despesas da cota parlamentar, projetos e votações. Gere relatórios com fontes oficiais e exporte dados para arquivos locais.",
+    "developerName": "matfmc",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/matfmc/camarabr",
+    "defaultPrompt": [
+      "Faça um relatório de um deputado federal.",
+      "Consulte a tramitação de um projeto de lei.",
+      "Compare os gastos da cota parlamentar por partido."
+    ],
+    "brandColor": "#166534"
+  }
+}

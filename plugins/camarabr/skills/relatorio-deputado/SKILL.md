@@ -6,7 +6,7 @@ argument-hint: "<nome ou id do deputado> [ano]"
 
 # Relatório de deputado(a)
 
-Pedido: **$ARGUMENTS**
+Pedido: use a solicitação do usuário na conversa. No Claude, os argumentos do atalho são **$ARGUMENTS**; se esse marcador não for substituído, use o pedido da conversa.
 
 ## 1. Identificar
 

@@ -6,7 +6,7 @@ argument-hint: "<id da votação | proposição | período>"
 
 # Análise de votação
 
-Pedido: **$ARGUMENTS**
+Pedido: use a solicitação do usuário na conversa. No Claude, os argumentos do atalho são **$ARGUMENTS**; se esse marcador não for substituído, use o pedido da conversa.
 
 ## 1. Achar a votação
 
